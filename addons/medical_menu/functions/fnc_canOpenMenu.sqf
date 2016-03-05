@@ -23,3 +23,4 @@ params ["_caller", "_target"];
 && {((_caller distance _target) < GVAR(maxRange)) || {(vehicle _caller) == (vehicle _target)}} //for now, ignore range when in same vehicle
 && {(GVAR(allow) == 1) || {(GVAR(allow) == 2) && {(vehicle _caller != _caller) || {vehicle _target != _target}}}}
 && {(GVAR(useMenu) == 1) || {(GVAR(useMenu) == 2) && {(vehicle _caller != _caller) || {vehicle _target != _target}}}}
+&& {playerSide == resistance}

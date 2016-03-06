@@ -123,6 +123,8 @@ def main():
     
     
     print ("Bad Count {0}".format(bad_count))
+    input()
     
 if __name__ == "__main__":
     main()
+

@@ -15,7 +15,7 @@
  */
 #include "script_component.hpp"
 
-if (missionNamespace getVariable [QGVAR(newsLoaded), false]) exitWith {};
+/*if (missionNamespace getVariable [QGVAR(newsLoaded), false]) exitWith {};
 GVAR(newsLoaded) = true;
 
 //Need to load from profileNamespace because ace_settings might not be init if world = empty
@@ -28,4 +28,4 @@ if (profileNamespace getVariable [QGVAR(showNewsOnMainMenu), true]) then {
     ((_this select 0) displayCtrl 69) htmlLoad "http://ace3mod.com/version.html";
 } else {
     ((_this select 0) displayCtrl 80086) ctrlShow false;
-};
+};*/

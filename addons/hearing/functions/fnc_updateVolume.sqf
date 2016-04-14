@@ -58,5 +58,4 @@ private _soundTransitionTime = if (_justUpdateVolume) then {0.1} else {1};
 
 _soundTransitionTime fadeSound _volume;
 _soundTransitionTime fadeSpeech _volume;
-ACE_player setVariable ["tf_globalVolume", _volume];
 if (!isNil "acre_api_fnc_setGlobalVolume") then {[_volume^(0.33)] call acre_api_fnc_setGlobalVolume;};

@@ -1,67 +1,40 @@
 
+class CBA_Extended_EventHandlers;
+
 class CfgVehicles {
-	class ACE_Module;
-	class ACE_ModuleInteraction : ACE_Module {
-		author = "$STR_ace_common_ACETeam";
-		category = ACE;
-		displayName = "$STR_ace_interaction_Module_DisplayName";
-		function = "ACE_Interaction_fnc_moduleInteraction";
-		scope = public;
-		isGlobal = 1;
-		isSingular = 1;
-		icon = "\z\ace\addons\interaction\UI\Icon_Module_Interaction_ca.paa";
-		
-		class Arguments {
-			class EnableTeamManagement {
-				displayName = "$STR_ace_interaction_EnableTeamManagement_DisplayName";
-				description = "$STR_ace_interaction_EnableTeamManagement_Description";
-				typeName = BOOL;
-				defaultValue = 1;
-			};
-		};
-		
-		class ModuleDescription {
-			description = "$STR_ace_interaction_Module_Description";
-		};
-	};
-	
-	class Man;
-	class CAManBase : Man {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				distance = 4;
-				condition = 1;
-				statement = "";
-				icon = "\a3\ui_f\data\IGUI\Cfg\Actions\eject_ca.paa";
-				selection = "pelvis";
-				
-				class ACE_PassMagazine {
-					displayName = "$STR_ace_interaction_PassMagazine";
-					condition = "";
-					statement = "";
-					showDisabled = 0;
-					priority = 3.3;
-					icon = "\a3\ui_f\data\gui\Rsc\RscDisplayArsenal\cargomag_ca.paa";
-					
-					class ACE_PassMagazinePrimary {
-						displayName = "$STR_ace_interaction_PassMagazinePrimary";
-						condition = "[_player,_target,primaryWeapon _target] call ace_interaction_fnc_canPassMagazine";
-						statement = "[_player,_target,primaryWeapon _target] call ace_interaction_fnc_passMagazine";
-						showDisabled = 0;
-						priority = 3;
-						icon = "\a3\ui_f\data\gui\Rsc\RscDisplayArsenal\primaryweapon_ca.paa";
-					};
-					
-					class ACE_PassMagazineHandgun {
-						displayName = "$STR_ace_interaction_PassMagazineHandgun";
-						condition = "[_player,_target,handgunWeapon _target] call ace_interaction_fnc_canPassMagazine";
-						statement = "[_player,_target,handgunWeapon _target] call ace_interaction_fnc_passMagazine";
-						showDisabled = 0;
-						priority = 1;
-						icon = "\a3\ui_f\data\gui\Rsc\RscDisplayArsenal\handgun_ca.paa";
-					};
-				};
+    class ACE_Module;
+    class ACE_ModuleInteraction: ACE_Module {
+        author = ECSTRING(common,ACETeam);
+        category = "ACE";
+        displayName = CSTRING(Module_DisplayName);
+        function = "ACE_Interaction_fnc_moduleInteraction";
+        scope = 2;
+        isGlobal = 1;
+        isSingular = 1;
+        icon = PATHTOF(UI\Icon_Module_Interaction_ca.paa);
+        class Arguments {
+            class EnableTeamManagement {
+                displayName = CSTRING(EnableTeamManagement_DisplayName);
+                description = CSTRING(EnableTeamManagement_Description);
+                typeName = "BOOL";
+                defaultValue = 1;
+            };
+        };
+        class ModuleDescription {
+            description = CSTRING(Module_Description);
+        };
+    };
+
+    class Man;
+    class CAManBase: Man {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                distance = 4;
+                condition = QUOTE(true);
+                statement = "";
+                icon = "\a3\ui_f\data\IGUI\Cfg\Actions\eject_ca.paa";
+                selection = "pelvis";
 				
 				class ACE_Carte {
 					displayName = "Plaque gendarme";
@@ -149,142 +122,131 @@ class CfgVehicles {
 						displayName = "$STR_pInAct_Arrest";
 						distance = 4;
 						condition = "alive _target && {isPlayer _target} && {_target isKindOf 'Man'} && {(_target getVariable['ACE_Captives_isHandcuffed',false])} && {playerSide == west} && {side _target in [civilian,independent]} && (player distance (getMarkerPos 'jail_send') < 30)";
-						statement = "[] call life_fnc_showArrestDialog;";
+						statement = "[_target] call life_fnc_showArrestDialog;";
 						showDisabled = 1;
 						priority = 2.5;
 						hotkey = "P";
 					};
 				};
-				
-				class ACE_Armyinteraction {
-					displayName = "Interaction armée";
-					distance = 4;
-					condition = "(alive _target) && {isPlayer _target} && {_target isKindOf 'Man'} && {(_target getVariable['ACE_Captives_isHandcuffed',false]) OR (_target getVariable['ACE_Captives_isSurrendering',false])} && {playerSide == east} && {side _target in [civilian,independent]}";
-					statement = "";
-					showDisabled = 0;
-					priority = 3.2;
-					subMenu[] = {"ACE_Armyinteraction",0};
-					hotkey = "C";
-					class ACE_TakeUniform {
-						displayName = "Saisir vetements";
-						distance = 4;
-						condition = "alive _target && {isPlayer _target} && {_target isKindOf 'Man'} && {(_target getVariable['ACE_Captives_isHandcuffed',false])} && {playerSide == east} && {side _target in [civilian,independent]}";
-						statement = "[_target] spawn life_fnc_takeUniform;";
-						showDisabled = 1;
-						priority = 2.4;
-						hotkey = "V";
-					};
-					class ACE_TakeWeapons {
-						displayName = "Saisir armes";
-						distance = 4;
-						condition = "alive _target && {isPlayer _target} && {_target isKindOf 'Man'} && {(_target getVariable['ACE_Captives_isHandcuffed',false])} && {playerSide == east} && {side _target in [civilian,independent]}";
-						statement = "[_target] spawn life_fnc_takeWeapons;";
-						showDisabled = 1;
-						priority = 2.4;
-						hotkey = "A";
-					};
-				};
-			};
-			
-			class ACE_Torso {
-				displayName = "$STR_ace_interaction_Torso";
-				selection = "spine3";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-			
-			class ACE_Head {
-				displayName = "$STR_ace_interaction_Head";
-				selection = "pilot";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-			
-			class ACE_ArmLeft {
-				displayName = "$STR_ace_interaction_ArmLeft";
-				selection = "LeftForeArm";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-			
-			class ACE_ArmRight {
-				displayName = "$STR_ace_interaction_ArmRight";
-				selection = "RightForeArm";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-			
-			class ACE_LegLeft {
-				displayName = "$STR_ace_interaction_LegLeft";
-				selection = "LKnee";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-			
-			class ACE_LegRight {
-				displayName = "$STR_ace_interaction_LegRight";
-				selection = "RKnee";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-			
-			class ACE_Weapon {
-				displayName = "$STR_ace_interaction_Weapon";
-				position = "call ace_interaction_fnc_getWeaponPos";
-				distance = 1.5;
-				condition = "";
-				statement = "";
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Equipment {
-				displayName = "$STR_ace_interaction_Equipment";
-				condition = 1;
-				exceptions[] = {"isNotInside", "notOnMap", "isNotSitting"};
-				statement = "";
-				showDisabled = 1;
-				priority = 4.5;
-				icon = "";
-			};
-		};
-	};
-	
-	class LandVehicle;
-	class Car : LandVehicle {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 10;
-				condition = 1;
-				
-				class ACE_Passengers {
-					displayName = "$STR_ace_interaction_Passengers";
-					condition = 1;
-					statement = "";
-					insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-				};
+            };
+
+            class ACE_Torso {
+                displayName = CSTRING(Torso);
+                selection = "spine3";
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+            class ACE_Head {
+                displayName = CSTRING(Head);
+                selection = "pilot";
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+            class ACE_ArmLeft {
+                displayName = CSTRING(ArmLeft);
+                selection = "LeftForeArm";
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+            class ACE_ArmRight {
+                displayName = CSTRING(ArmRight);
+                selection = "RightForeArm";
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+            class ACE_LegLeft {
+                displayName = CSTRING(LegLeft);
+                selection = "LKnee";
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+            class ACE_LegRight {
+                displayName = CSTRING(LegRight);
+                selection = "RKnee";
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+            class ACE_Weapon {
+                displayName = CSTRING(Weapon);
+                position = QUOTE(call DFUNC(getWeaponPos));
+                distance = 1.50;
+                condition = "";
+                statement = "";
+            };
+        };
+
+        class ACE_SelfActions {
+
+            class ACE_Equipment {
+                displayName = CSTRING(Equipment);
+                condition = QUOTE(true);
+                exceptions[] = {"isNotInside", "notOnMap", "isNotSitting"};
+                statement = "";
+                showDisabled = 1;
+                priority = 4.5;
+                icon = "";  // @todo
+            };
+        };
+    };
+
+    class LandVehicle;
+    class Car: LandVehicle {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 10;
+                condition = "true";
+                class ACE_Passengers {
+                    displayName = CSTRING(Passengers);
+                    condition = "true";
+                    statement = "";
+                    insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+                };
 				
 				class ACE_repair {
 					displayName = "$STR_vInAct_Repair";
 					distance = 4;
 					condition = "alive _target && {speed _target == 0} && {(damage _target < 1)}";
 					statement = "[_target] spawn life_fnc_repairTruck";
-					showDisabled = 1;
+					showDisabled = 0;
 					priority = 1.6;
 				};
+                /*class ACE_TempestMine {
+					displayName = "$STR_vInAct_DeviceMine";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && (isNil {(_target getVariable 'mining')} || !local _target) && (_target in life_vehicles) && typeOf _target == 'O_Truck_03_device_F'";
+					statement = "[_target] spawn life_fnc_deviceMine";
+					showDisabled = 0;
+					priority = 1.6;
+				};
+                 class ACE_PumpOil {
+					displayName = "Lancer la pompe";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && (isNil {(_target getVariable 'pumping')} || !local _target) && (_target in life_vehicles) && typeOf _target == 'O_Truck_03_device_F'";
+					statement = "[_target] spawn life_fnc_oilPump";
+					showDisabled = 0;
+					priority = 1.6;
+				};*/
 				class ACE_copRegistration {
 					displayName = "$STR_vInAct_Registration";
 					distance = 4;
 					condition = "alive _target && {speed _target == 0} && playerSide == west";
 					statement = "[_target] spawn life_fnc_searchVehAction";
+					showDisabled = 0;
+					priority = 1.6;
+				};
+                class ACE_copSerchVeh {
+					displayName = "$STR_vInAct_SearchVehicle";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && playerSide == west";
+					statement = "[_target] spawn life_fnc_vehInvSearch;";
 					showDisabled = 0;
 					priority = 1.6;
 				};
@@ -320,32 +282,32 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Passengers {
-				displayName = "$STR_ace_interaction_Passengers";
-				condition = 1;
-				statement = "";
-				insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-			};
-		};
-	};
-	class Tank : LandVehicle {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 10;
-				condition = 1;
-				
-				class ACE_Passengers {
-					displayName = "$STR_ace_interaction_Passengers";
-					condition = 1;
-					statement = "";
-					insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-				};
+            };
+        };
+
+        class ACE_SelfActions {
+            class ACE_Passengers {
+                displayName = CSTRING(Passengers);
+                condition = "true";
+                statement = "";
+                insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+            };
+        };
+    };
+
+    class Tank: LandVehicle {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 10;
+                condition = "true";
+                class ACE_Passengers {
+                    displayName = CSTRING(Passengers);
+                    condition = "true";
+                    statement = "";
+                    insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+                };
 				
 				class ACE_repair {
 					displayName = "$STR_vInAct_Repair";
@@ -363,6 +325,14 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
+                class ACE_copSerchVeh {
+					displayName = "$STR_vInAct_SearchVehicle";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && playerSide == west";
+					statement = "[_target] spawn life_fnc_vehInvSearch;";
+					showDisabled = 0;
+					priority = 1.6;
+				};
 				class ACE_copPullout {
 					displayName = "Ejecter";
 					distance = 4;
@@ -387,34 +357,33 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Passengers {
-				displayName = "$STR_ace_interaction_Passengers";
-				condition = 1;
-				statement = "";
-				insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-			};
-		};
-	};
-	
-	class Air;
-	class Helicopter : Air {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 10;
-				condition = 1;
-				
-				class ACE_Passengers {
-					displayName = "$STR_ace_interaction_Passengers";
-					condition = 1;
-					statement = "";
-					insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-				};
+            };
+        };
+
+        class ACE_SelfActions {
+            class ACE_Passengers {
+                displayName = CSTRING(Passengers);
+                condition = "true";
+                statement = "";
+                insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+            };
+        };
+    };
+
+    class Air;
+    class Helicopter: Air {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 10;
+                condition = "true";
+                class ACE_Passengers {
+                    displayName = CSTRING(Passengers);
+                    condition = "true";
+                    statement = "";
+                    insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+                };
 				
 				class ACE_repair {
 					displayName = "$STR_vInAct_Repair";
@@ -432,6 +401,14 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
+                class ACE_copSerchVeh {
+					displayName = "$STR_vInAct_SearchVehicle";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && playerSide == west";
+					statement = "[_target] spawn life_fnc_vehInvSearch;";
+					showDisabled = 0;
+					priority = 1.6;
+				};
 				class ACE_copPullout {
 					displayName = "Ejecter";
 					distance = 4;
@@ -443,7 +420,7 @@ class CfgVehicles {
 				class ACE_Impound {
 					displayName = "$STR_vInAct_Impound";
 					distance = 4;
-					condition = "alive _target && {speed _target == 0} && {(playerSide in [west,Independent])}";
+					condition = "alive _target && {speed _target == 0}  && playerSide == west";
 					statement = "[_target] spawn life_fnc_impoundAction";
 					showDisabled = 0;
 					priority = 1.6;
@@ -456,32 +433,32 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Passengers {
-				displayName = "$STR_ace_interaction_Passengers";
-				condition = 1;
-				statement = "";
-				insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-			};
-		};
-	};
-	class Plane : Air {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 10;
-				condition = 1;
-				
-				class ACE_Passengers {
-					displayName = "$STR_ace_interaction_Passengers";
-					condition = 1;
-					statement = "";
-					insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-				};
+            };
+        };
+
+        class ACE_SelfActions {
+            class ACE_Passengers {
+                displayName = CSTRING(Passengers);
+                condition = "true";
+                statement = "";
+                insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+            };
+        };
+    };
+
+    class Plane: Air {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 10;
+                condition = "true";
+                class ACE_Passengers {
+                    displayName = CSTRING(Passengers);
+                    condition = "true";
+                    statement = "";
+                    insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+                };
 				
 				class ACE_repair {
 					displayName = "$STR_vInAct_Repair";
@@ -499,6 +476,14 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
+                class ACE_copSerchVeh {
+					displayName = "$STR_vInAct_SearchVehicle";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && playerSide == west";
+					statement = "[_target] spawn life_fnc_vehInvSearch;";
+					showDisabled = 0;
+					priority = 1.6;
+				};
 				class ACE_copPullout {
 					displayName = "Ejecter";
 					distance = 4;
@@ -523,43 +508,43 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Passengers {
-				displayName = "$STR_ace_interaction_Passengers";
-				condition = 1;
-				statement = "";
-				insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-			};
-		};
-	};
-	
-	class Ship;	
-	class Ship_F : Ship {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 10;
-				condition = 1;
+            };
+        };
+
+        class ACE_SelfActions {
+            class ACE_Passengers {
+                displayName = CSTRING(Passengers);
+                condition = "true";
+                statement = "";
+                insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+            };
+        };
+    };
+
+    class Ship;
+    class Ship_F: Ship {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 10;
+                condition = "true";
+
+                class ACE_Push {
+                    displayName = CSTRING(Push);
+                    distance = 6;
+                    condition = QUOTE(getMass _target <= 2600 && {alive _target} && {vectorMagnitude velocity _target < 3});
+                    statement = QUOTE(_this call FUNC(push));
+                    showDisabled = 0;
+                    priority = -1;
+                };
+                class ACE_Passengers {
+                    displayName = CSTRING(Passengers);
+                    condition = "true";
+                    statement = "";
+                    insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+                };
 				
-				class ACE_Push {
-					displayName = "$STR_ace_interaction_Push";
-					distance = 6;
-					condition = "getMass _target <= 2600 && {alive _target} && {vectorMagnitude velocity _target < 3}";
-					statement = "_this call ace_interaction_fnc_push";
-					showDisabled = 0;
-					priority = -1;
-				};
-				
-				class ACE_Passengers {
-					displayName = "$STR_ace_interaction_Passengers";
-					condition = 1;
-					statement = "";
-					insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-				};
 				class ACE_repair {
 					displayName = "$STR_vInAct_Repair";
 					distance = 4;
@@ -576,6 +561,14 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
+                class ACE_copSerchVeh {
+					displayName = "$STR_vInAct_SearchVehicle";
+					distance = 4;
+					condition = "alive _target && {speed _target == 0} && playerSide == west";
+					statement = "[_target] spawn life_fnc_vehInvSearch;";
+					showDisabled = 0;
+					priority = 1.6;
+				};
 				class ACE_copPullout {
 					displayName = "Ejecter";
 					distance = 4;
@@ -600,133 +593,169 @@ class CfgVehicles {
 					showDisabled = 0;
 					priority = 1.6;
 				};
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Passengers {
-				displayName = "$STR_ace_interaction_Passengers";
-				condition = 1;
-				statement = "";
-				insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-			};
-		};
-	};
+            };
+        };
+
+        class ACE_SelfActions {
+            class ACE_Passengers {
+                displayName = CSTRING(Passengers);
+                condition = "true";
+                statement = "";
+                insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+            };
+        };
+    };
 	
-	class StaticWeapon : LandVehicle {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "gunnerview";
-				distance = 2;
-				condition = 1;
-				
-				class ACE_Passengers {
-					displayName = "$STR_ace_interaction_Passengers";
-					condition = 1;
-					statement = "";
-					insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-				};
-			};
-		};
-		
-		class ACE_SelfActions {
-			class ACE_Passengers {
-				displayName = "$STR_ace_interaction_Passengers";
-				condition = 1;
-				statement = "";
-				insertChildren = "_this call ace_interaction_fnc_addPassengersActions";
-			};
-		};
-	};
-	
-	class Pod_Heli_Transport_04_base_F : StaticWeapon {
-		class ACE_Actions : ACE_Actions {
-			class ACE_MainActions : ACE_MainActions {
-				distance = 5;
-			};
-		};
-	};
-	
-	class StaticMGWeapon : StaticWeapon {};
-	
-	class HMG_01_base_F : StaticMGWeapon {};
-	
-	class HMG_01_high_base_F : HMG_01_base_F {
-		class ACE_Actions : ACE_Actions {
-			class ACE_MainActions : ACE_MainActions {
-				position = "[-0.172852,0.164063,-0.476091]";
-			};
-		};
-	};
-	
-	class AA_01_base_F : StaticMGWeapon {
-		class ACE_Actions : ACE_Actions {
-			class ACE_MainActions : ACE_MainActions {
-				position = "[0,0.515869,-0.200671]";
-			};
-		};
-	};
-	
-	class AT_01_base_F : StaticMGWeapon {
-		class ACE_Actions : ACE_Actions {
-			class ACE_MainActions : ACE_MainActions {
-				position = "[0,0.515869,-0.200671]";
-			};
-		};
-	};
-	
-	class ThingX;	// External class reference	
-	class ReammoBox_F : ThingX {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 2;
-				condition = 1;
-				
-				class ACE_OpenBox {
-					displayName = "$STR_ace_interaction_OpenBox";
-					condition = "alive _target";
-					statement = "_player action [""Gear"",_target]";
-					showDisabled = 0;
-					priority = -1;
-				};
-			};
-		};
-		
-		class ACE_SelfActions {};
-	};
-	
-	class ACE_RepairItem_Base : ThingX {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 2;
-				condition = 1;
-			};
-		};
-		
-		class ACE_SelfActions {};
-	};
-	
-	class RoadCone_F : ThingX {
-		class ACE_Actions {
-			class ACE_MainActions {
-				displayName = "$STR_ace_interaction_MainAction";
-				selection = "";
-				distance = 2;
-				condition = 1;
-			};
-		};
-	};
-	
-	class RoadBarrier_F : RoadCone_F {
-		class ACE_Actions : ACE_Actions {
-			class ACE_MainActions : ACE_MainActions {
-				position = "[0,0,0.500671]";
-			};
-		};
-	};
+    class StaticWeapon: LandVehicle {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "gunnerview";
+                distance = 2;
+                condition = "true";
+                class ACE_Passengers {
+                    displayName = CSTRING(Passengers);
+                    condition = "true";
+                    statement = "";
+                    insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+                };
+            };
+        };
+
+        class ACE_SelfActions {
+            class ACE_Passengers {
+                displayName = CSTRING(Passengers);
+                condition = "true";
+                statement = "";
+                insertChildren = QUOTE(_this call DFUNC(addPassengersActions));
+            };
+        };
+    };
+
+    class Pod_Heli_Transport_04_base_F: StaticWeapon {
+        class ACE_Actions: ACE_Actions {
+            class ACE_MainActions: ACE_MainActions {
+                distance = 5;
+            };
+        };
+    };
+
+    class StaticMGWeapon: StaticWeapon {};
+    class HMG_01_base_F: StaticMGWeapon {};
+
+    class HMG_01_high_base_F: HMG_01_base_F {
+        class ACE_Actions: ACE_Actions {
+            class ACE_MainActions: ACE_MainActions {
+                position = "[-0.172852,0.164063,-0.476091]";
+            };
+        };
+    };
+
+    class AA_01_base_F: StaticMGWeapon {
+        class ACE_Actions: ACE_Actions {
+            class ACE_MainActions: ACE_MainActions {
+                position = "[0,0.515869,-0.200671]";
+            };
+        };
+    };
+
+    class AT_01_base_F: StaticMGWeapon {
+        class ACE_Actions: ACE_Actions {
+            class ACE_MainActions: ACE_MainActions {
+                position = "[0,0.515869,-0.200671]";
+            };
+        };
+    };
+
+    class ThingX;
+    class ReammoBox_F: ThingX {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 2;
+                condition = "true";
+
+                class ACE_OpenBox {
+                    displayName = CSTRING(OpenBox);
+                    condition = QUOTE(alive _target);
+                    statement = QUOTE(_player action [ARR_2(QUOTE(QUOTE(Gear)), _target)]);
+                    showDisabled = 0;
+                    priority = -1;
+                };
+            };
+        };
+
+        class ACE_SelfActions {};
+    };
+
+    class ACE_RepairItem_Base: ThingX {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 2;
+                condition = "true";
+            };
+        };
+
+        class ACE_SelfActions {};
+    };
+
+    class Lamps_base_F;
+    class Land_PortableLight_single_F: Lamps_base_F {
+        class EventHandlers {
+            class CBA_Extended_EventHandlers: CBA_Extended_EventHandlers {};
+        };
+
+        scope = 2;
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 2;
+                condition = "true";
+                class ACE_LampTurnOn {
+                    displayName = CSTRING(TurnOn);
+                    condition = QUOTE(alive _target && !(_target getVariable [ARR_2('ACE_lampOn',true)]));
+                    statement = QUOTE(_target call DFUNC(switchLamp));
+                    selection = "";
+                    distance = 2;
+                };
+                class ACE_LampTurnOff {
+                    displayName = CSTRING(TurnOff);
+                    condition = QUOTE(alive _target && _target getVariable [ARR_2('ACE_lampOn',true)]);
+                    statement = QUOTE(_target call DFUNC(switchLamp));
+                    selection = "";
+                    distance = 2;
+                };
+            };
+        };
+    };
+    class Land_PortableLight_single_off_F: Land_PortableLight_single_F {
+        scope = 1;
+    };
+    class Land_PortableLight_double_F: Land_PortableLight_single_F {};
+    class Land_PortableLight_double_off_F: Land_PortableLight_double_F {
+        scope = 1;
+    };
+    
+    class RoadCone_F: ThingX {
+        class ACE_Actions {
+            class ACE_MainActions {
+                displayName = CSTRING(MainAction);
+                selection = "";
+                distance = 2;
+                condition = "true";
+            };
+        };
+    };
+
+    class RoadBarrier_F: RoadCone_F {
+        class ACE_Actions: ACE_Actions {
+            class ACE_MainActions: ACE_MainActions {
+                position = "[0,0,0.500671]";
+            };
+        };
+    };
 };

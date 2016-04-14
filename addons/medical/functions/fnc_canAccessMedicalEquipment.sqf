@@ -20,11 +20,19 @@ params ["_caller", "_target"];
 _accessLevel = _target getVariable [QGVAR(allowSharedEquipmentAccess), -1];
 
 _return = false;
+_return = switch (true) do
+{
+	case (side _caller == side _target && side _caller != civilian):
+	{
+		true;
+	};
 
-if (_accessLevel >= 0) then {
-    if (_accessLevel == 0) exitWith { _return = true; };
-    if (_accessLevel == 1) exitWith { _return = (side _target == side _caller); };
-    if (_accessLevel == 2) exitWith { _return = (group _target == group _caller); };
+	case (side _caller == independent): {true;};
+
+	default
+	{
+		false;
+	};
 };
 
 _return;

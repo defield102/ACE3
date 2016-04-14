@@ -15,14 +15,14 @@ class ACE_Settings {
         description = CSTRING(cursorKeepCenteredDescription);
     };
     class GVAR(AlwaysUseCursorInteraction) {
-        value = 0;
+        value = 1;
         typeName = "BOOL";
         isClientSettable = 1;
         category = CSTRING(Category_InteractionMenu);
         displayName = CSTRING(AlwaysUseCursorInteraction);
     };
     class GVAR(UseListMenu) {
-        value = 0;
+        value = 1;
         typeName = "BOOL";
         isClientSettable = 1;
         category = CSTRING(Category_InteractionMenu);

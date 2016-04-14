@@ -14,4 +14,4 @@
 
 params ["_vehicle"];
 
-(_vehicle getVariable [QGVAR(medicClass), getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "attendant")]) > 0
+((_vehicle getVariable [QGVAR(medicClass), getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "attendant")]) > 0) || (_vehicle getVariable ["vehiculePompier", false])

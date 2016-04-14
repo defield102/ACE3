@@ -28,11 +28,13 @@ if !(local _unit) exitWith {
 
 private ["_damageReturn",  "_typeOfDamage", "_minLethalDamage", "_newDamage", "_typeIndex", "_preventDeath"];
 
+if (_projectile in ["DDOPP_B_Taser"]) exitWith {0;};
 // bug, assumed fixed, @todo excessive testing, if nothing happens remove
 if (_projectile isEqualType objNull) then {
     _projectile = typeOf _projectile;
     _this set [4, _projectile];
 };
+
 
 TRACE_3("ACE_DEBUG: HandleDamage",_selection,_damage,_unit);
 

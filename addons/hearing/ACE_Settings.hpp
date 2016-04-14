@@ -8,7 +8,7 @@ class ACE_Settings {
     };
     class GVAR(EarplugsVolume) {
         category = CSTRING(Module_DisplayName);
-        value = 0.5;
+        value = 0.1;
         typeName = "SCALAR";
     };
     class GVAR(UnconsciousnessVolume) {
